@@ -16,12 +16,35 @@ Project to show ways to implements tests in a live application
 - If user has negativa balance, in new cash-in discount the value plus 20% of tax about the negative ammount
 - The user can't do a purchase if has negative balance
 
-### Example of input
+### Input example
 
 ```
 {
     id: '1a',
     value: 10
+}
+```
+
+### Response example
+
+```
+/cashin
+
+{
+    id: '1a',
+    name: 'Ada Lovelace',
+    balance: 100
+}
+
+/purchase
+
+{
+    message: 'Purchase completed',
+    user: {
+        id: '1a',
+        name: 'Ada Lovelace',
+        balance: 100
+        }
 }
 ```
 

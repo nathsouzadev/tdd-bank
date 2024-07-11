@@ -8,15 +8,23 @@ export class AppService {
       name: 'Ada Lovelace',
       balance: 100,
     },
+    {
+      id: '2b',
+      name: 'Alan Turing',
+      balance: 0,
+    },
+    {
+      id: '3c',
+      name: 'Grace Hooper',
+      balance: -50,
+    },
   ];
 
   cashin = (id: string, value: number) => {
-    const user = this.users.find((user) => user.id === id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+    const user = this.validateUser(id);
+    const ammount = this.validateCashIn(value, user);
 
-    user.balance += value;
+    ammount === value ? (user.balance += value) : (user.balance = ammount);
 
     const index = this.users.findIndex((user) => user.id === id);
     const updatedUser = { ...user, balance: user.balance };
@@ -25,16 +33,34 @@ export class AppService {
     return user;
   };
 
-  purchase = (id: string, value: number) => {
+  validateCashIn = (value, user) => {
+    if (user.balance < 0) {
+      const ammount = user.balance + value + user.balance * 0.2;
+      return ammount;
+    }
+
+    return value;
+  };
+
+  validateUser = (id: string) => {
     const user = this.users.find((user) => user.id === id);
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
+    return user;
+  };
+
+  validateBalance = (user) => {
     if (user.balance <= 0) {
       throw new NotFoundException('Insufficient balance');
     }
+  };
+
+  purchase = (id: string, value: number) => {
+    const user = this.validateUser(id);
+    this.validateBalance(user);
 
     user.balance -= value;
 
